@@ -1,35 +1,22 @@
-import Button from "@mui/material/Button";
-import { useState } from "react";
 type ChartFilterProp = {
   label: string;
+  isActive: boolean;
+  onClick: (label: string) => void;
 };
-export const ChartFilter = ({ label }: ChartFilterProp) => {
-  const [focusButton, setFocusButton] = useState(false);
-  const [focusButtons, setFocusButtons] = useState(false);
 
-  const handleButtonFocus = (label: string) => {
-    if (label === "RDS" || label === "TIMESCALE") {
-      setFocusButton(true);
-    }
-    if (label === "DAILY" || label === "WEEKLY") {
-      setFocusButtons(true);
-    }
-  };
+export const ChartFilterButton = ({ label, isActive, onClick }: ChartFilterProp) => {
   return (
     <div>
-      <Button
-        variant="text"
-        onClick={() => handleButtonFocus(label)}
+      <button
+        onClick={() => onClick(label)}
         className={
-          focusButton === true
-            ? "text-black focus:border-black"
-            : "" && focusButtons === true
-            ? "text-black"
-            : ""
+          isActive
+            ? "text-red-800 text-sm border rounded-sm p-2"
+            : "text-sm border rounded-sm p-2"
         }
       >
         {label}
-      </Button>
+      </button>
     </div>
   );
 };

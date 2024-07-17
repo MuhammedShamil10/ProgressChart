@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Bar,
   BarChart,
@@ -9,12 +9,29 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { data } from "../common/dummyData";
+// import { data } from "../common/dummyData";
 import { Button, ButtonGroup } from "@mui/material";
 
-export const SwitchChart = () => {
+export const SwitchChart = ({data ,refetch}: any) => {
   const [switchChart, setSwitchChart] = useState(false);
+  const [chartData, setChartData] = useState([]);
+  
+  const transformData = (data: any) => {
+    return data?.map((item: { readTime: string | number | Date; value: any; }) => ({
+      name: new Date(item.readTime).toLocaleDateString(),
+      value: item?.value
+    }));
+  };
 
+  useEffect(() => {
+    refetch()
+    if (data) {
+      setChartData(transformData(data));
+    }
+  }, [data, refetch]);
+  console.log(chartData,'chartData');
+  
+  
   const handleBarChart = () => {
     setSwitchChart(true);
   };
@@ -26,21 +43,21 @@ export const SwitchChart = () => {
     <div className="flex flex-col justify-center items-center pt-5">
       <div>
         {switchChart === true ? (
-          <BarChart width={1350} height={600} data={data}>
+          <BarChart width={1350} height={600} data={chartData}>
             <XAxis dataKey="name" stroke="#8884d8" />
             <YAxis />
             <Tooltip wrapperStyle={{ width: 100, backgroundColor: "#ccc" }} />
             <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-            <Bar dataKey="uv" fill="#8884d8" barSize={30} />
+            <Bar dataKey="value" fill="#8884d8" barSize={30} />
           </BarChart>
         ) : (
           <LineChart
             width={1350}
             height={600}
-            data={data}
+            data={chartData}
             margin={{ top: 5, right: 20, bottom: 5, left: 0 }}
           >
-            <Line type="monotone" dataKey="uv" stroke="#8884d8" />
+            <Line type="monotone" dataKey="value" stroke="#8884d8" />
             <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
             <XAxis dataKey="name" />
             <YAxis />

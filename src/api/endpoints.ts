@@ -1,3 +1,4 @@
-export const API_URLS ={
-    getChartData: () => `/chart`  //TODO
-}
+export const API_URLS = {
+  getChartData: () =>
+    `/input-value`,
+};

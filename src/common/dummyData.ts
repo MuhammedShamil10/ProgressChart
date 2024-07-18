@@ -45,25 +45,6 @@ export const data = [
 
 
 
-
-
-const formatDateTime = (date: Date) => {
-  const padZero = (num: number) => num.toString().padStart(2, '0');
-
-  const year = date.getFullYear();
-  const month = padZero(date.getMonth() + 1); 
-  const day = padZero(date.getDate());
-  const hours = padZero(date.getHours());
-  const minutes = padZero(date.getMinutes());
-  const seconds = padZero(date.getSeconds());
-
-  return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
-};
-
-const currentDate = new Date();
- const formattedDate = formatDateTime(currentDate);
-console.log('formattedDate',formattedDate); 
-
 export const currentYearRange = {
   startDate: `${new Date().getFullYear()}-01-01`,
   endDate: `${new Date().getFullYear()}-12-31`,

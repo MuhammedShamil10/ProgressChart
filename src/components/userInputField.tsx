@@ -6,11 +6,12 @@ type InputProp = {
   inputData: {
     name: string;
     password: string;
-    uuId: string;
+    measurementUuids: string;
     timeFrom: string;
     timeTo: string;
-    RDS: string;
+    type: string;
     DAILY: string;
+    basicAuth: string
   };
   handleDateChange: (
     data: any
@@ -19,11 +20,12 @@ type InputProp = {
     React.SetStateAction<{
       name: string;
       password: string;
-      uuId: string;
+      measurementUuids: string;
       timeFrom: string;
       timeTo: string;
-      RDS: string;
+      type: string;
       DAILY: string;
+      basicAuth: string
     }>
   >;
 };
@@ -33,7 +35,6 @@ export const UserLogin = ({
   setInputData,
   handleDateChange,
 }: InputProp) => {
-//   console.log(inputData, "dateRange");
 
   return (
     <>
@@ -70,7 +71,7 @@ export const UserLogin = ({
             placeholder="Enter UUID"
             className="border p-2"
             onChange={(e) =>
-              setInputData({ ...inputData, uuId: e.target.value })
+              setInputData({ ...inputData, measurementUuids: e.target.value })
             }
           />
         </div>

@@ -1,35 +1,47 @@
 import { useQuery } from "@tanstack/react-query";
-import { httpClient } from "./httpClient";
 import { API_URLS } from "./endpoints";
 import { DataQueryKey } from "./data-query-keys";
+import axios from "axios";
 
 type GetProgressPayload = {
   timeFrom: string;
   timeTo: string;
-  RDS: string;
+  type: string;
   DAILY: string;
+  measurementUuids: string;
+  basicAuth: string;
 };
 
 export const useGetChartData = (payload: GetProgressPayload) => {
   const params = {
     timeFrom: payload.timeFrom,
     timeTo: payload.timeTo,
-    RDS: payload.RDS,
+    type: payload.type,
     DAILY: payload.DAILY,
+    UUID: payload.measurementUuids,
+    basicAuth: payload.basicAuth,
   };
+
+  console.log("basicAuth", params.basicAuth);
+
+  const httpClient = axios.create({
+    baseURL: "https://app.stg.rhino.energy/api/",
+    withCredentials: false,
+    headers: {
+      Authorization: `Basic ${params.basicAuth}`,
+      "Content-Type": "application/json",
+    },
+  });
+
   return useQuery({
     queryKey: [DataQueryKey],
     queryFn: async () => {
       const { data } = await httpClient.post(API_URLS.getChartData(), {
-        // timeFrom: "2023-07-02T18:30:00",
-        // timeTo: "2023-08-02T18:30:00",
-        // source: "RDS",
-        // tableName: "INPUT_VALUE_DAILY",
         timeFrom: `${params.timeFrom}T00:00:00`,
         timeTo: `${params.timeTo}T00:00:00`,
-        source: params.RDS,
+        source: params.type,
         tableName: `INPUT_VALUE_${params.DAILY}`,
-        measurementUuids: ["c4055774-c6c2-46bc-b64e-c946160a146e"],
+        measurementUuids: [params.UUID],
       });
       return data;
     },

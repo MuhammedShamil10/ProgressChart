@@ -1,31 +1,43 @@
 import { SwitchChart } from "../components/switchChart";
-import { DateRange } from "../components/datePicker";
-import { DateRange as TDateRange } from "../type";
-import { useEffect, useState } from "react";
+import { InputData, DateRange as TDateRange } from "../type";
+import { useState } from "react";
 import { currentYearRange } from "../common/dummyData";
 import { ChartFilterButton } from "../components/chartFiltering";
 import { UserLogin } from "../components/userInputField";
 import { Button } from "@mui/material";
 import { useGetChartData } from "../api/useGetProgressChartData";
+import { ApiResponseTimeTable } from "../components/responseTimeApi";
 
 export const ProgressChart = () => {
   const [activeLabel1, setActiveLabel1] = useState<string>("");
   const [activeLabel2, setActiveLabel2] = useState<string>("");
-  const [fetchTime, setFetchTime] = useState(0);
-  //   const [dateRange, setDateRange] = useState<TDateRange>({
-  //     fromDate: currentYearRange.startDate,
-  //     toDate: currentYearRange.endDate,
-  //   });
+  const [fetchTime, setFetchTime] = useState("");
+
+  const chartDataList = ["TIMESCALE", "RDS"];
+  const dayFilterItem = ["DAILY", "WEEKLY"];
 
   const [inputData, setInputData] = useState({
     name: "",
     password: "",
-    uuId: "",
+    measurementUuids: "",
     timeFrom: currentYearRange.startDate,
     timeTo: currentYearRange.endDate,
-    RDS: "",
+    type: "",
     DAILY: "",
+    basicAuth: "",
   });
+
+  const concatenatedString = `${inputData.name}:${inputData.password}`;
+  const encodedString = btoa(concatenatedString);
+
+  const basicAuth = () => {
+    setInputData({
+      ...inputData,
+      basicAuth: encodedString,
+    });
+  };
+
+  const [storeData, setStoreData] = useState<InputData>();
 
   const { data, refetch } = useGetChartData(inputData);
 
@@ -35,7 +47,7 @@ export const ProgressChart = () => {
 
   const handleActiveButton = (label: string) => {
     setActiveLabel1(label);
-    setInputData({ ...inputData, RDS: label });
+    setInputData({ ...inputData, type: label });
   };
 
   const handleActiveButton2 = (label: string) => {
@@ -43,18 +55,32 @@ export const ProgressChart = () => {
     setInputData({ ...inputData, DAILY: label });
   };
 
-  const formHandle = () => {
-    const startTime = performance.now();
-    refetch();
-    const endTime = performance.now();
-    const timeTaken = endTime - startTime;
-    setFetchTime(timeTaken);
+  const handleApiResponseTimeData = (timeTaken: string) => {
+    setStoreData((prevStoreData = []) => [
+      ...prevStoreData,
+      {
+        name: inputData.name,
+        password: inputData.password,
+        uuId: inputData.measurementUuids,
+        timeFrom: inputData.timeFrom,
+        timeTo: inputData.timeTo,
+        RDS: inputData.type,
+        DAILY: inputData.DAILY,
+        time: timeTaken,
+      },
+    ]);
   };
 
-  console.log(inputData, "inputDataHome");
-
-  const chartDataList = ["TIMESCALE", "RDS"];
-  const dayFilterItem = ["DAILY", "WEEKLY"];
+  const formHandle = async () => {
+    basicAuth();
+    const startTime = performance.now();
+    await refetch();
+    const endTime = performance.now();
+    const timeTaken = endTime - startTime;
+    let trimNumber = timeTaken.toFixed(2);
+    setFetchTime(trimNumber);
+    handleApiResponseTimeData(trimNumber);
+  };
 
   return (
     <div className="flex flex-col items-center justify-center pt-5">
@@ -98,7 +124,7 @@ export const ProgressChart = () => {
             !inputData.name ||
             !inputData.timeFrom ||
             !inputData.timeTo ||
-            !inputData.uuId ||
+            !inputData.measurementUuids ||
             !inputData.password
           }
           className="h-12"
@@ -107,9 +133,9 @@ export const ProgressChart = () => {
         >
           Submit
         </Button>
-        {fetchTime}
       </div>
       <SwitchChart refetch={refetch} data={data} />
+      <ApiResponseTimeTable storeData={storeData} />
     </div>
   );
 };

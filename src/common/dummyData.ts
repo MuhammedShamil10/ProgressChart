@@ -43,7 +43,9 @@ export const data = [
   },
 ];
 
-
+export const chartDataList = ["TIMESCALE", "RDS"];
+export const dayFilterItem = ["DAILY", "WEEKLY"];
+export const timeScaleFilter = ["3 day", "13 days"]; 
 
 export const currentYearRange = {
   startDate: `${new Date().getFullYear()}-01-01`,

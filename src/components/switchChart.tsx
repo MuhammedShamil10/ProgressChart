@@ -38,7 +38,7 @@ export const SwitchChart = ({ data, refetch }: any) => {
   };
 
   return (
-    <div>
+    <div className="h-screen">
       {chartData.length ? (
         <div className="flex flex-col justify-center items-center pt-5">
           <div>
@@ -85,9 +85,9 @@ export const SwitchChart = ({ data, refetch }: any) => {
           </div>
         </div>
       ) : (
-        <>
-          <span className="pt-4">Please submit the input fields</span>
-        </>
+        <div className="pt-16">
+          <span className="">Please submit the input fields</span>
+        </div>
       )}
     </div>
   );

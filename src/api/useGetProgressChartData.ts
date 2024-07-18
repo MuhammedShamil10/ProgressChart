@@ -40,7 +40,7 @@ export const useGetChartData = (payload: GetProgressPayload) => {
         timeFrom: `${params.timeFrom}T00:00:00`,
         timeTo: `${params.timeTo}T00:00:00`,
         source: params.type,
-        tableName: `INPUT_VALUE_${params.DAILY}`,
+        tableName: params.DAILY,
         measurementUuids: [params.UUID],
       });
       return data;

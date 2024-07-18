@@ -1,7 +1,12 @@
 import { SwitchChart } from "../components/switchChart";
 import { InputData, DateRange as TDateRange } from "../type";
 import { useState } from "react";
-import { currentYearRange } from "../common/dummyData";
+import {
+  chartDataList,
+  currentYearRange,
+  dayFilterItem,
+  timeScaleFilter,
+} from "../common/dummyData";
 import { ChartFilterButton } from "../components/chartFiltering";
 import { UserLogin } from "../components/userInputField";
 import { Button } from "@mui/material";
@@ -12,9 +17,6 @@ export const ProgressChart = () => {
   const [activeLabel1, setActiveLabel1] = useState<string>("");
   const [activeLabel2, setActiveLabel2] = useState<string>("");
   const [fetchTime, setFetchTime] = useState("");
-
-  const chartDataList = ["TIMESCALE", "RDS"];
-  const dayFilterItem = ["DAILY", "WEEKLY"];
 
   const [inputData, setInputData] = useState({
     name: "",
@@ -106,26 +108,47 @@ export const ProgressChart = () => {
                 />
               ))}
             </div>
-            <div className="border p-2 flex flex-row gap-4 rounded-lg border-gray-200">
-              {dayFilterItem.map((label) => (
-                <ChartFilterButton
-                  key={label}
-                  isActive={activeLabel2 === label}
-                  onClick={handleActiveButton2}
-                  label={label}
-                />
-              ))}
-            </div>
+            {activeLabel1 === "RDS" ? (
+              <div className="flex flex-row items-center gap-3">
+                <span>:</span>
+                <div className="border p-2 flex flex-row gap-4 rounded-lg border-gray-200">
+                  {dayFilterItem.map((label) => (
+                    <ChartFilterButton
+                      key={label}
+                      isActive={activeLabel2 === label}
+                      onClick={handleActiveButton2}
+                      label={label}
+                    />
+                  ))}
+                </div>
+              </div>
+            ) : null}
+
+            {activeLabel1 === "TIMESCALE" ? (
+              <div className="flex flex-row items-center gap-3">
+                <span>:</span>
+                <div className="border p-2 flex flex-row gap-4 rounded-lg border-gray-200">
+                  {timeScaleFilter.map((label) => (
+                    <ChartFilterButton
+                      key={label}
+                      isActive={activeLabel2 === label}
+                      onClick={handleActiveButton2}
+                      label={label}
+                    />
+                  ))}
+                </div>
+              </div>
+            ) : null}
           </div>
         </div>
-
         <Button
           disabled={
             !inputData.name ||
             !inputData.timeFrom ||
             !inputData.timeTo ||
             !inputData.measurementUuids ||
-            !inputData.password
+            !inputData.password ||
+            !inputData.DAILY
           }
           className="h-12"
           variant="contained"

@@ -11,6 +11,6 @@ export type InputData = {
   timeFrom: string;
   timeTo: string;
   RDS: string;
-  DAILY: string;
+  tableName: string;
   time: string
 }[];

@@ -1,12 +1,7 @@
 import { SwitchChart } from "../components/switchChart";
 import { InputData, DateRange as TDateRange } from "../type";
 import { useState } from "react";
-import {
-  chartDataList,
-  currentYearRange,
-  dayFilterItem,
-  timeScaleFilter,
-} from "../common/dummyData";
+import { buttonOption, currentYearRange } from "../common/dummyData";
 import { ChartFilterButton } from "../components/chartFiltering";
 import { UserLogin } from "../components/userInputField";
 import { Button } from "@mui/material";
@@ -14,8 +9,6 @@ import { useGetChartData } from "../api/useGetProgressChartData";
 import { ApiResponseTimeTable } from "../components/responseTimeApi";
 
 export const ProgressChart = () => {
-  const [activeLabel1, setActiveLabel1] = useState<string>("");
-  const [activeLabel2, setActiveLabel2] = useState<string>("");
   const [fetchTime, setFetchTime] = useState("");
 
   const [inputData, setInputData] = useState({
@@ -25,7 +18,7 @@ export const ProgressChart = () => {
     timeFrom: currentYearRange.startDate,
     timeTo: currentYearRange.endDate,
     type: "",
-    DAILY: "",
+    tableName: "",
     basicAuth: "",
   });
 
@@ -43,18 +36,24 @@ export const ProgressChart = () => {
 
   const { data, refetch } = useGetChartData(inputData);
 
+  const [activeCategory, setActiveCategory] = useState("");
+  const [activeCategoryOption, setActiveCategoryOption] = useState("");
+
   const handleDateChange = (data: any) => {
     setInputData({ ...inputData, ...data });
   };
 
-  const handleActiveButton = (label: string) => {
-    setActiveLabel1(label);
-    setInputData({ ...inputData, type: label });
+  const handleCategoryClick = (category: string) => {
+    setActiveCategory(category);
   };
 
-  const handleActiveButton2 = (label: string) => {
-    setActiveLabel2(label);
-    setInputData({ ...inputData, DAILY: label });
+  const handleActiveButton = (value: string, source: string) => {
+    setInputData({
+      ...inputData,
+      tableName: value,
+      type: source,
+    });
+    setActiveCategoryOption(value);
   };
 
   const handleApiResponseTimeData = (timeTaken: string) => {
@@ -67,7 +66,7 @@ export const ProgressChart = () => {
         timeFrom: inputData.timeFrom,
         timeTo: inputData.timeTo,
         RDS: inputData.type,
-        DAILY: inputData.DAILY,
+        tableName: inputData.tableName,
         time: timeTaken,
       },
     ]);
@@ -84,6 +83,8 @@ export const ProgressChart = () => {
     handleApiResponseTimeData(trimNumber);
   };
 
+  console.log("inputData", inputData);
+
   return (
     <div className="flex flex-col items-center justify-center pt-5">
       <div className="flex flex-col items-center gap-4 border border-gray-200 p-4 rounded-md">
@@ -99,48 +100,37 @@ export const ProgressChart = () => {
           />
           <div className="flex flex-wrap gap-5">
             <div className="border p-2 flex flex-row gap-4 rounded-lg border-gray-200">
-              {chartDataList.map((label) => (
+              {buttonOption.map((group) => (
                 <ChartFilterButton
-                  key={label}
-                  isActive={activeLabel1 === label}
-                  onClick={handleActiveButton}
-                  label={label}
+                  key={group.name}
+                  isActive={activeCategory === group.name}
+                  onClick={() => handleCategoryClick(group.name)}
+                  label={group.name}
                 />
               ))}
             </div>
-            {activeLabel1 === "RDS" ? (
+            {activeCategory && (
               <div className="flex flex-row items-center gap-3">
                 <span>:</span>
                 <div className="border p-2 flex flex-row gap-4 rounded-lg border-gray-200">
-                  {dayFilterItem.map((label) => (
-                    <ChartFilterButton
-                      key={label}
-                      isActive={activeLabel2 === label}
-                      onClick={handleActiveButton2}
-                      label={label}
-                    />
-                  ))}
+                  {buttonOption
+                    .find((group) => group.name === activeCategory)
+                    ?.option.map((option) => (
+                      <ChartFilterButton
+                        key={option.value}
+                        isActive={activeCategoryOption === option.value}
+                        onClick={() =>
+                          handleActiveButton(option.value, activeCategory)
+                        }
+                        label={option.label}
+                      />
+                    ))}
                 </div>
               </div>
-            ) : null}
-
-            {activeLabel1 === "TIMESCALE" ? (
-              <div className="flex flex-row items-center gap-3">
-                <span>:</span>
-                <div className="border p-2 flex flex-row gap-4 rounded-lg border-gray-200">
-                  {timeScaleFilter.map((label) => (
-                    <ChartFilterButton
-                      key={label}
-                      isActive={activeLabel2 === label}
-                      onClick={handleActiveButton2}
-                      label={label}
-                    />
-                  ))}
-                </div>
-              </div>
-            ) : null}
+            )}
           </div>
         </div>
+
         <Button
           disabled={
             !inputData.name ||
@@ -148,7 +138,7 @@ export const ProgressChart = () => {
             !inputData.timeTo ||
             !inputData.measurementUuids ||
             !inputData.password ||
-            !inputData.DAILY
+            !inputData.tableName
           }
           className="h-12"
           variant="contained"

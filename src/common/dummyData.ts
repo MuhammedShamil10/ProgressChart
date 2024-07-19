@@ -1,4 +1,4 @@
-export const data = [
+export const dummyData = [
   {
     name: "Page A",
     uv: 4000,
@@ -43,13 +43,23 @@ export const data = [
   },
 ];
 
-export const chartDataList = ["TIMESCALE", "RDS"];
-export const dayFilterItem = ["DAILY", "WEEKLY"];
-export const timeScaleFilter = [
-  "seven",
-  "thirty",
-  "seven_compressed",
-  "thirty_compressed",
+export const buttonOption = [
+  {
+    name: "TIMESCALE",
+    option: [
+      { label: "Seven", value: "seven" },
+      { label: "Thirty", value: "thirty" },
+      { label: "Seven compressed", value: "seven_compressed" },
+      { label: "Thirty compressed", value: "thirty_compressed" },
+    ],
+  },
+  {
+    name: "RDS",
+    option: [
+      { label: "Daily", value: "DAILY" },
+      { label: "Weekly", value: "WEEKLY" },
+    ],
+  },
 ];
 
 export const currentYearRange = {

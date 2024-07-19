@@ -7,7 +7,7 @@ type GetProgressPayload = {
   timeFrom: string;
   timeTo: string;
   type: string;
-  DAILY: string;
+  tableName: string;
   measurementUuids: string;
   basicAuth: string;
 };
@@ -17,12 +17,10 @@ export const useGetChartData = (payload: GetProgressPayload) => {
     timeFrom: payload.timeFrom,
     timeTo: payload.timeTo,
     type: payload.type,
-    DAILY: payload.DAILY,
+    tableName: payload.tableName,
     UUID: payload.measurementUuids,
     basicAuth: payload.basicAuth,
   };
-
-  console.log("basicAuth", params.basicAuth);
 
   const httpClient = axios.create({
     baseURL: "https://app.stg.rhino.energy/api/",
@@ -34,13 +32,13 @@ export const useGetChartData = (payload: GetProgressPayload) => {
   });
 
   return useQuery({
-    queryKey: [DataQueryKey],
+    queryKey: [DataQueryKey.progressChart],
     queryFn: async () => {
       const { data } = await httpClient.post(API_URLS.getChartData(), {
         timeFrom: `${params.timeFrom}T00:00:00`,
         timeTo: `${params.timeTo}T00:00:00`,
         source: params.type,
-        tableName: params.DAILY,
+        tableName: params.tableName,
         measurementUuids: [params.UUID],
       });
       return data;

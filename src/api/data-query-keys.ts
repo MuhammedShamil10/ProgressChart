@@ -1,1 +1,3 @@
-export const DataQueryKey = {} 
+export const DataQueryKey = {
+    progressChart: 'progressChart'
+} 

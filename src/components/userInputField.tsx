@@ -10,7 +10,7 @@ type InputProp = {
     timeFrom: string;
     timeTo: string;
     type: string;
-    DAILY: string;
+    tableName: string;
     basicAuth: string
   };
   handleDateChange: (
@@ -24,7 +24,7 @@ type InputProp = {
       timeFrom: string;
       timeTo: string;
       type: string;
-      DAILY: string;
+      tableName: string;
       basicAuth: string
     }>
   >;

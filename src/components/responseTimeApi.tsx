@@ -7,9 +7,9 @@ type TableProp = {
 
 export const ApiResponseTimeTable = ({ storeData }: TableProp) => {
   return (
-    <div className="overflow-x-auto">
+    <div className="overflow-x-auto block">
       {storeData ? <Table>
-        <Table.Head className="border  dark:text-white dark:bg-gray-800">
+        <Table.Head className="border dark:text-white dark:bg-gray-800">
           <Table.HeadCell className="border-r p-2">FROM DATE</Table.HeadCell>
           <Table.HeadCell className="border-r p-2">TO DATE</Table.HeadCell>
           <Table.HeadCell className="border-r p-2">RDS | TIMESCALE</Table.HeadCell>

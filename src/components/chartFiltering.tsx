@@ -11,8 +11,8 @@ export const ChartFilterButton = ({ label, isActive, onClick }: ChartFilterProp)
         onClick={() => onClick(label)}
         className={
           isActive
-            ? "text-red-800 text-sm border rounded-sm p-2"
-            : "text-sm border rounded-sm p-2"
+            ? "text-red-800 text-sm border rounded-md p-2"
+            : "text-sm border rounded-md p-2"
         }
       >
         {label}

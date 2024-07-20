@@ -8,7 +8,7 @@ type GetProgressPayload = {
   timeTo: string;
   type: string;
   tableName: string;
-  measurementUuids: string;
+  inputIds: string;
   basicAuth: string;
 };
 
@@ -18,7 +18,7 @@ export const useGetChartData = (payload: GetProgressPayload) => {
     timeTo: payload.timeTo,
     type: payload.type,
     tableName: payload.tableName,
-    UUID: payload.measurementUuids,
+    inputIds: payload.inputIds,
     basicAuth: payload.basicAuth,
   };
 
@@ -39,7 +39,7 @@ export const useGetChartData = (payload: GetProgressPayload) => {
         timeTo: `${params.timeTo}T00:00:00`,
         source: params.type,
         tableName: params.tableName,
-        measurementUuids: [params.UUID],
+        inputIds: [params.inputIds],
       });
       return data;
     },

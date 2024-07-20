@@ -58,6 +58,7 @@ export const buttonOption = [
     option: [
       { label: "Daily", value: "DAILY" },
       { label: "Weekly", value: "WEEKLY" },
+      { label: "Default", value: "DEFAULT" },
     ],
   },
 ];
@@ -65,4 +66,38 @@ export const buttonOption = [
 export const currentYearRange = {
   startDate: `${new Date().getFullYear()}-01-01`,
   endDate: `${new Date().getFullYear()}-12-31`,
+};
+
+
+const myReducer = (state: any, action: any) => {
+  switch (action.type) {
+    case "INPUTDATA":
+      return {
+        ...state,
+        inputData: {
+          ...state.inputData,
+          ...action.payload,
+        },
+      };
+    case "FETCHTIME":
+      return {
+        ...state,
+        fetchTime: action.payload,
+      };
+    case "STOREDATA":
+      return {
+        ...state,
+        storeData: [...state.storeData, ...action.payload],
+      };
+    case "ACTIVECATEGORY":
+      return {
+        ...state,
+        activeCategory: action.payload,
+      };
+    case "ACTIVECATEGORYOPTION":
+      return {
+        ...state,
+        activeCategoryOption: action.payload,
+      };
+  }
 };

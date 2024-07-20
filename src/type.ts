@@ -7,7 +7,7 @@ export type DateRange = {
 export type InputData = {
   name: string;
   password: string;
-  uuId: string;
+  inputId: string;
   timeFrom: string;
   timeTo: string;
   RDS: string;

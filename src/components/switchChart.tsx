@@ -38,7 +38,7 @@ export const SwitchChart = ({ data, refetch }: any) => {
   };
 
   return (
-    <div className="h-screen">
+    <div className="">
       {chartData.length ? (
         <div className="flex flex-col justify-center items-center pt-5">
           <div>
@@ -46,9 +46,7 @@ export const SwitchChart = ({ data, refetch }: any) => {
               <BarChart width={1350} height={600} data={chartData}>
                 <XAxis dataKey="name" stroke="#8884d8" />
                 <YAxis />
-                <Tooltip
-                  wrapperStyle={{ width: 100, backgroundColor: "#ccc" }}
-                />
+                <Tooltip itemStyle={{ width: "100%" }} />
                 <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
                 <Bar dataKey="value" fill="#8884d8" barSize={30} />
               </BarChart>
@@ -63,7 +61,7 @@ export const SwitchChart = ({ data, refetch }: any) => {
                 <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
                 <XAxis dataKey="name" />
                 <YAxis />
-                <Tooltip />
+                <Tooltip itemStyle={{ width: "100%" }} />
               </LineChart>
             )}
           </div>

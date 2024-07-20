@@ -14,7 +14,7 @@ export const ProgressChart = () => {
   const [inputData, setInputData] = useState({
     name: "",
     password: "",
-    measurementUuids: "",
+    inputIds: "",
     timeFrom: currentYearRange.startDate,
     timeTo: currentYearRange.endDate,
     type: "",
@@ -62,7 +62,7 @@ export const ProgressChart = () => {
       {
         name: inputData.name,
         password: inputData.password,
-        uuId: inputData.measurementUuids,
+        inputId: inputData.inputIds,
         timeFrom: inputData.timeFrom,
         timeTo: inputData.timeTo,
         RDS: inputData.type,
@@ -115,7 +115,7 @@ export const ProgressChart = () => {
                 <div className="border p-2 flex flex-row gap-4 rounded-lg border-gray-200">
                   {buttonOption
                     .find((group) => group.name === activeCategory)
-                    ?.option.map((option) => (
+                    ?.option?.map((option) => (
                       <ChartFilterButton
                         key={option.value}
                         isActive={activeCategoryOption === option.value}
@@ -136,7 +136,7 @@ export const ProgressChart = () => {
             !inputData.name ||
             !inputData.timeFrom ||
             !inputData.timeTo ||
-            !inputData.measurementUuids ||
+            !inputData.inputIds ||
             !inputData.password ||
             !inputData.tableName
           }

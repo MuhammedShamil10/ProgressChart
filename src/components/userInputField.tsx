@@ -1,32 +1,13 @@
 import { DateRange } from "./datePicker";
-import { DateRange as TDateRange } from "../type";
+import { DateRange as TDateRange, UserInput } from "../type";
 
 type InputProp = {
   dateRange: any;
-  inputData: {
-    name: string;
-    password: string;
-    inputIds: string;
-    timeFrom: string;
-    timeTo: string;
-    type: string;
-    tableName: string;
-    basicAuth: string;
-  };
+  inputData: UserInput;
   handleDateChange: (data: any) => void;
-  setInputData: React.Dispatch<
-    React.SetStateAction<{
-      name: string;
-      password: string;
-      inputIds: string;
-      timeFrom: string;
-      timeTo: string;
-      type: string;
-      tableName: string;
-      basicAuth: string;
-    }>
-  >;
+  setInputData: React.Dispatch<React.SetStateAction<UserInput>>;
 };
+
 export const UserLogin = ({
   dateRange,
   inputData,
@@ -38,7 +19,7 @@ export const UserLogin = ({
       <div className="flex flex-row justify-center items-center gap-4 p-4 w-full">
         <div className="flex flex-row items-center gap-2">
           <label className="whitespace-nowrap" htmlFor="">
-            User name:{" "}
+            User name:
           </label>
           <input
             type="text"

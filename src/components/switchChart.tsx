@@ -10,9 +10,12 @@ import {
   YAxis,
 } from "recharts";
 import { Button, ButtonGroup } from "@mui/material";
-export const SwitchChart = ({ data, refetch }: any) => {
+
+export const SwitchChart = ({ data }: any) => {
+  
   const [switchChart, setSwitchChart] = useState(false);
   const [chartData, setChartData] = useState([]);
+  
 
   const transformData = (data: any) => {
     return data?.map(
@@ -24,11 +27,10 @@ export const SwitchChart = ({ data, refetch }: any) => {
   };
 
   useEffect(() => {
-    refetch();
-    if (data) {
-      setChartData(transformData(data));
+    if (data?.data) {
+      setChartData(transformData(data?.data));
     }
-  }, [data, refetch]);
+  }, [data]);
 
   const handleBarChart = () => {
     setSwitchChart(true);
@@ -36,14 +38,14 @@ export const SwitchChart = ({ data, refetch }: any) => {
   const handleLineChart = () => {
     setSwitchChart(false);
   };
-
+  const width = window.innerWidth;
   return (
-    <div className="">
-      {chartData.length ? (
+    <div>
+      {chartData?.length  ? (
         <div className="flex flex-col justify-center items-center pt-5">
-          <div>
+          <div className="px-5">
             {switchChart === true ? (
-              <BarChart width={1350} height={600} data={chartData}>
+              <BarChart width={width - 500} height={600} data={chartData}>
                 <XAxis dataKey="name" stroke="#8884d8" />
                 <YAxis />
                 <Tooltip itemStyle={{ width: "100%" }} />
@@ -52,7 +54,7 @@ export const SwitchChart = ({ data, refetch }: any) => {
               </BarChart>
             ) : (
               <LineChart
-                width={1350}
+                width={width -500}
                 height={600}
                 data={chartData}
                 margin={{ top: 5, right: 20, bottom: 5, left: 0 }}
@@ -65,7 +67,7 @@ export const SwitchChart = ({ data, refetch }: any) => {
               </LineChart>
             )}
           </div>
-          <div className="pt-5 pr-5 w-full flex items-end justify-end">
+          <div className="pt-5 pr-5 w-full flex items-end justify-center">
             <ButtonGroup variant="contained" aria-label="Basic button group">
               <Button
                 className="border px-2 py-1 w-16"
@@ -84,7 +86,7 @@ export const SwitchChart = ({ data, refetch }: any) => {
         </div>
       ) : (
         <div className="pt-16">
-          <span className="">Please submit the input fields</span>
+          <span className="">No data</span>
         </div>
       )}
     </div>

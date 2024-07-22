@@ -3,7 +3,6 @@ export type DateRange = {
   toDate: string;
 };
 
-
 export type InputData = {
   name: string;
   password: string;
@@ -14,3 +13,14 @@ export type InputData = {
   tableName: string;
   time: string
 }[];
+
+export type UserInput = {
+  name: string;
+  password: string;
+  inputIds: string;
+  timeFrom: string;
+  timeTo: string;
+  type: string;
+  tableName: string;
+  basicAuth: string;
+}

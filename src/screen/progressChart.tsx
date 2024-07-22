@@ -1,11 +1,11 @@
 import { SwitchChart } from "../components/switchChart";
 import { InputData, DateRange as TDateRange } from "../type";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { buttonOption, currentYearRange } from "../common/dummyData";
 import { ChartFilterButton } from "../components/chartFiltering";
 import { UserLogin } from "../components/userInputField";
 import { Button } from "@mui/material";
-import { useGetChartData } from "../api/useGetProgressChartData";
+import { usePostChartData } from "../api/useGetProgressChartData";
 import { ApiResponseTimeTable } from "../components/responseTimeApi";
 
 export const ProgressChart = () => {
@@ -34,7 +34,10 @@ export const ProgressChart = () => {
 
   const [storeData, setStoreData] = useState<InputData>();
 
-  const { data, refetch } = useGetChartData(inputData);
+  const { mutateAsync: postChartData, isPending } = usePostChartData(
+    inputData.basicAuth
+  );
+  const [chartData, setChartData] = useState();
 
   const [activeCategory, setActiveCategory] = useState("");
   const [activeCategoryOption, setActiveCategoryOption] = useState("");
@@ -75,7 +78,11 @@ export const ProgressChart = () => {
   const formHandle = async () => {
     basicAuth();
     const startTime = performance.now();
-    await refetch();
+    await postChartData(inputData, {
+      onSuccess: (res: any) => {
+        setChartData(res);
+      },
+    });
     const endTime = performance.now();
     const timeTaken = endTime - startTime;
     let trimNumber = timeTaken.toFixed(2);
@@ -145,10 +152,13 @@ export const ProgressChart = () => {
           onClick={formHandle}
         >
           Submit
+          {isPending && <div className="loader"></div>}
         </Button>
       </div>
-      <SwitchChart refetch={refetch} data={data} />
-      <ApiResponseTimeTable storeData={storeData} />
+      <div className="flex flex-row justify-center items-center pr-2">
+        <SwitchChart data={chartData} />
+        <ApiResponseTimeTable storeData={storeData} />
+      </div>
     </div>
   );
 };

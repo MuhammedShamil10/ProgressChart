@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { API_URLS } from "./endpoints";
 import { DataQueryKey } from "./data-query-keys";
 import axios from "axios";
@@ -12,36 +12,27 @@ type GetProgressPayload = {
   basicAuth: string;
 };
 
-export const useGetChartData = (payload: GetProgressPayload) => {
-  const params = {
-    timeFrom: payload.timeFrom,
-    timeTo: payload.timeTo,
-    type: payload.type,
-    tableName: payload.tableName,
-    inputIds: payload.inputIds,
-    basicAuth: payload.basicAuth,
-  };
-
+export const usePostChartData = (basicAuth: string) => {
   const httpClient = axios.create({
     baseURL: "https://app.stg.rhino.energy/api/",
     withCredentials: false,
     headers: {
-      Authorization: `Basic ${params.basicAuth}`,
+      Authorization: `Basic ${basicAuth}`,
       "Content-Type": "application/json",
     },
   });
 
-  return useQuery({
-    queryKey: [DataQueryKey.progressChart],
-    queryFn: async () => {
-      const { data } = await httpClient.post(API_URLS.getChartData(), {
-        timeFrom: `${params.timeFrom}T00:00:00`,
-        timeTo: `${params.timeTo}T00:00:00`,
-        source: params.type,
-        tableName: params.tableName,
-        inputIds: [params.inputIds],
+  return useMutation({
+    mutationKey: [DataQueryKey.progressChart],
+    mutationFn: async (payload: GetProgressPayload) => {
+      const result = await httpClient.post(API_URLS.getChartData(), {
+        timeFrom: `${payload.timeFrom}T00:00:00`,
+        timeTo: `${payload.timeTo}T00:00:00`,
+        source: payload.type,
+        tableName: payload.tableName,
+        inputIds: [payload.inputIds],
       });
-      return data;
+      return result;
     },
   });
 };
